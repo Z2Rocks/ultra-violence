@@ -19,5 +19,5 @@ The functional loop is such:
     record the family of functions which satisfy Fxy(X) = Y
     do that for Fyz(Y) = Z and so forth until you run out of data (or whatever hueristic you choose)
     Compose Fxy . Fyz . ... = Fxyz...
-    use the freedom gather on the path to generate new data
+    use the freedom gatherd on the path to generate new data
     link that data in to something 'with hands and feet'
