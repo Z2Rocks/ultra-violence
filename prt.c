@@ -92,7 +92,7 @@ void link(u64 size) {
 			l_count = 0;
 			l_point.maas = 0;
 			l_point.frei = 0;
-			{//since we have one sided freedom
+			{//since we have one-sided freedom
 				for (u64 k = 0; k < size + 63 >> 6; ++k) {
 					u64 a = *(u128 *)(arr_64 + (i * size >> 6) + k) >> (i * size & 63);
 					if (k + 1 >= size + 63 >> 6) {
@@ -161,7 +161,7 @@ typedef struct {
 	u8 d[];
 } fbr_t;
    
-//<- size * size + 7 >> 3 -> |
+// <- size * size + 7 >> 3 -> |
 
 u8 *fbr_arr;
 u64 fbr_top, fbr_bot;
@@ -237,7 +237,9 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			u8 a = arr_16[(i * f->size >> 4) + ((ulen - 1) >> 1)] >> (i * f->size & 7);
 			u8 b = arr_16[(j * f->size >> 4) + ((ulen - 1) >> 1)] >> (j * f->size & 7);
 			u8 c = (a ^ b) & (0xff >> 8 - (f->size & 7));
-			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);//sadly no in-place today
+			
+			
+			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
 		}
 		
 		if (t) {
@@ -324,6 +326,7 @@ void compose() {
 
 //LiFE
 //linear fiber extension
+//in loving memory of Terry A. Davis
 
 int main(u16 argc, s8 *argv[]) {
 	
