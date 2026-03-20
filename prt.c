@@ -249,7 +249,7 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			// then populate copies of original data-vector, according to a loose size-freedom hierarchy
 			
 			
-			//also, i havent compiled anything yet so excuse aggregious errors
+			self referantial statemtns are like the basis of life, ok, stop being a jugdgmental bitch
 		}
 		
 	}
