@@ -208,6 +208,22 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 	u8 *r = malloc(ulen);
 	for (u64 t = 0; t < 1 << (pnt_pntrs[i][2] : RAND_FCTR ? pnt_pntrs[i][2] < RAND_FCTR); ++t) {
 
+		u64 l_fbr, n_s = 16 + (f->size * f->size + 7 >> 3);
+		#pragma omp critical
+		{
+			if (fbr_bot + n_s < FIBR_LIMT) {
+				l_fbr = fbr_bot;
+				fbr_bot += n_s;
+			} else if (n_s < fbr_top) {
+				l_fbr = fbr_top;
+				fbr_top += n_s;
+			} else {
+				return false;
+			}
+		}
+		
+		f = (fbr_t *)(fbr_arr + l_fbr);
+
 		if (pnt_pntrs[i][2] < RAND_FCTR && t) {
 			l_rand = t ^ (t << 1);
 			r[l_rand >> 3] &= 1 << (l_rand & 7);
@@ -241,12 +257,6 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
 		}
 		
-		if (t) {
-			
-			
-			
-			
-		}
 		
 	}
 	
@@ -327,6 +337,7 @@ void compose() {
 //linear fiber extension
 //in loving memory of Terry A. Davis
 // to-do, rewrite in Holy-C
+//        in-place 'Wurm'
 int main(u16 argc, s8 *argv[]) {
 	
 	srand(time(NULL));
