@@ -237,7 +237,7 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			u8 a = arr_16[(i * f->size >> 4) + ((ulen - 1) >> 1)] >> (i * f->size & 7);
 			u8 b = arr_16[(j * f->size >> 4) + ((ulen - 1) >> 1)] >> (j * f->size & 7);
 			u8 c = (a ^ b) & (0xff >> 8 - (f->size & 7));
-			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
+			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);//sadly no in-place today
 		}
 		
 		if (t) {
