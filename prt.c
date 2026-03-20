@@ -244,7 +244,7 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 		
 		if (t) {
 			
-			
+			//short strike
 			
 			
 		}
