@@ -207,7 +207,7 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 	u64 l_rand = rando;
 	u8 *r = malloc(ulen);
 	for (u64 t = 0; t < 1 << (pnt_pntrs[i][2] : RAND_FCTR ? pnt_pntrs[i][2] < RAND_FCTR); ++t) {
-		
+
 		if (pnt_pntrs[i][2] < RAND_FCTR && t) {
 			l_rand = t ^ (t << 1);
 			r[l_rand >> 3] &= 1 << (l_rand & 7);
@@ -238,13 +238,12 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			u8 b = arr_16[(j * f->size >> 4) + ((ulen - 1) >> 1)] >> (j * f->size & 7);
 			u8 c = (a ^ b) & (0xff >> 8 - (f->size & 7));
 			
-			
 			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
 		}
 		
 		if (t) {
 			
-			//short strike
+			
 			
 			
 		}

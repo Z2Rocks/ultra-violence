@@ -1,0 +1,25 @@
+{
+    "keyboard.layout": "00000409",
+    "workbench.colorTheme": "Default High Contrast",
+    "editor.fontFamily": "Concorde, 'Courier New', monospace",
+    "files.defaultLanguage": "C",
+    "editor.minimap.enabled": false,
+    "editor.occurrencesHighlight": "singleFile",
+    "editor.matchBrackets": "never",
+    "editor.selectionHighlight": false,
+    "editor.semanticHighlighting.enabled": false,
+    "editor.bracketPairColorization.enabled": false,
+    "editor.tokenColorCustomizations": {
+        "comments": "#FF0000",
+        "keywords": "#FF0000",
+        "strings": "#FF0000",
+        "functions": "#FF0000",
+        "variables": "#FF0000"
+    },
+    "workbench.colorCustomizations": {
+        "editor.wordHighlightBorder": "#00000000",
+        "editor.wordHighlightStrongBorder": "#00000000",
+        "editor.rangeHighlightBorder": "#00000000",
+        "editor.selectionBackground": "#ff00006b"
+    }
+}
