@@ -243,10 +243,7 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 		}
 		
 		if (t) {
-			// to-do, since, APPARENTLY, for reasons I shall omit, (I was delayed by 4 months), I now have to hurry, you get a sloppy ass unpolished first prototype
-			// we gather up fibres in the queUE, (learn latin folks!), work through them until satisfied ('uncertainty' of connected fibres too great, or out)
-			// (also nice for a gpu)
-			// then populate copies of original data-vector, according to a loose size-freedom hierarchy
+			
 			
 			
 			
@@ -330,7 +327,7 @@ void compose() {
 //LiFE
 //linear fiber extension
 //in loving memory of Terry A. Davis
-
+// to-do, rewrite in Holy-C
 int main(u16 argc, s8 *argv[]) {
 	
 	srand(time(NULL));
