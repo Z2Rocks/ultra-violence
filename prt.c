@@ -276,7 +276,9 @@ inline void adv_top_fbr(u64 i, u64 j) {
 			}
 			memcpy(f, fbr_arr + l_fbr, size);
 		}
+		free(f);
 	}
+	free(fbr_pntr);
 }
 
 u8 *shit_arr;
