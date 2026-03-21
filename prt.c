@@ -160,7 +160,7 @@ void link(u64 size) {
 }
 
 typedef struct {
-	u64 strt, size;
+	u64 strt, size, rand;
 	u8 d[];
 } fbr_t;
 // bit-matrix
@@ -182,22 +182,34 @@ inline bool init_fbr(u8 *fbr_pntr, u64 i, u64 j, u64 size) {
 	f->d[size * size >> 3] &= 1 << (size * size & 7);
 	f->strt = i * size;
 	f->size = size;
-	
+	f->rand = pnt_pntrs[i][2];
 	return true;
+}
+
+inline u64 rndm_slct(u64 n, u64 size, u64 i) {
+	u16 *arr_16 = (u16 *)arr;
+	u8 p = ~arr_16[i * size >> 4] >> (i * size & 7);
+	u64 j = 0, k = 0;
+	while (j + __builtin_popcount(p) < n && k < size) {
+		p = ~arr_16[i * size + k >> 4] >> (i * size & 7);
+		j += __builtin_popcount(p);
+		k += 8;
+	}
+	while (j++ < n) p ^= p - 1;
+	return k + __builtin_ctz(p);
 }
 
 u64 rando;
 
 inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 	u16 *arr_16 = (u16 *)arr;
-	fbr_t *f = (fbr_t *)fbr_pntr;
 	u64 ulen = f->size + 7 >> 3;
 	
-	u64 l_rand = rando;
-	u8 *r = malloc(ulen);
+	u64 l, l_rand = rando;
+	u8 p, *r = malloc(ulen);
 	for (u64 t = 0; t < 1 << (pnt_pntrs[i][2] : RAND_FCTR ? pnt_pntrs[i][2] < RAND_FCTR); ++t) {
 
-		u64 l_fbr, n_s = 16 + (f->size * f->size + 7 >> 3);
+		u64 l_fbr, n_s = 24 + (f->size * f->size + 7 >> 3);
 		#pragma omp critical
 		{
 			if (fbr_bot + n_s < FIBR_LIMT) {
@@ -212,22 +224,28 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 		}
 		
 		f = (fbr_t *)(fbr_arr + l_fbr);
-
+		
+		f->strt = fbr_pntr->strt;
+		f->size = fbr_pntr->size;
+		f->rand = fbr_pntr->rand;
+		f->rand += pnt_pntrs[i][2];
+		
 		if (pnt_pntrs[i][2] < RAND_FCTR && t) {
 			l_rand = t ^ (t << 1);
-			r[l_rand >> 3] &= 1 << (l_rand & 7);
+			l = rndm_slct(l_rand, f->size, i);
+			r[l >> 3] ^= 1 << (l & 7);
 		} else {
-			u64 l = l_rand;
+			l = l_rand;
 			l_rand ^= l_rand >> 12;
 			l_rand ^= l_rand << 25;
 			l_rand ^= l_rand >> 27;
 			l_rand *= 0x2545f4914f6cdd1dULL;
 			l_rand ^= l;
 			l = 0;
-			for (u64 k = 0; k < size - 1; ++k) {
-				while (arr[i * size + l >> 3] & 1 << (l & 7)) ++l;
-				r[k >> 3] &= ((u8 *)l_rand)[k & 6] & 1 << (k & 7);
-				++l;
+			for (u64 k = 0; k < pnt_pntrs[i][2]; ++k) {
+				p = arr_16[i * f->size + l >> 4] >> (i * f->size & 7);	
+				while (p & 1 << (l & 7)) ++l;
+				r[l >> 3] &= (((u8 *)l_rand)[k & 6] & 1 << (k & 7)) << (l & 7);
 			}
 		}
 		
