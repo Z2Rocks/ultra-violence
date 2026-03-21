@@ -214,11 +214,13 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			l_rand = t ^ (t << 1);
 			r[l_rand >> 3] &= 1 << (l_rand & 7);
 		} else {
+			u64 l = l_rand;
 			l_rand ^= l_rand >> 12;
 			l_rand ^= l_rand << 25;
 			l_rand ^= l_rand >> 27;
 			l_rand *= 0x2545f4914f6cdd1dULL;
-			u64 l = 0;
+			l_rand ^= l;
+			l = 0;
 			for (u64 k = 0; k < size - 1; ++k) {
 				while (arr[i * size + l >> 3] & 1 << (l & 7)) ++l;
 				r[k >> 3] &= ((u8 *)l_rand)[k & 6] & 1 << (k & 7);
