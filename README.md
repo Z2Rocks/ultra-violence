@@ -18,6 +18,6 @@ The functional loop is such:
     look for vectors Y which are allowed by your composition function
     record the family of functions which satisfy Fxy(X) = Y
     do that for Fyz(Y) = Z and so forth until you run out of data (or whatever hueristic you choose)
-    Compose Fxy . Fyz . ... = Fxyz...
+    Compose Fxy . Fyz . ... = Fxyz...x
     use the freedom gatherd on the path to generate new data
     link that data in to something 'with hands and feet'

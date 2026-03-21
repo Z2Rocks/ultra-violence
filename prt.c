@@ -166,24 +166,10 @@ typedef struct {
 u8 *fbr_arr;
 u64 fbr_top, fbr_bot;
 fbr_bot++
-inline bool init_fbr(u64 i, u64 j, u64 size) {
+inline bool init_fbr(u8 *fbr_pntr, u64 i, u64 j, u64 size) {
 	u16 *arr_16 = (u16 *)arr;
 	
-	u64 l_fbr, n_s = 16 + (size * size + 7 >> 3);
-	#pragma omp critical
-	{
-		if (fbr_bot + n_s < FIBR_LIMT) {
-			l_fbr = fbr_bot;
-			fbr_bot += n_s;
-		} else if (n_s < fbr_top) {
-			l_fbr = fbr_top;
-			fbr_top += n_s;
-		} else {
-			return false;
-		}
-	}
-	
-	fbr_t *f = (fbr_t *)(fbr_arr + l_fbr);
+	fbr_t *f = (fbr_t *)fbr_pntr;
 	for (u64 k = 0; k < size - 1; ++k) {
 		u8 a = arr_16[i * size + k >> 4] >> (i * size + k & 7);
 		u8 b = arr_16[j * size + k >> 4] >> (j * size + k & 7);
@@ -253,86 +239,19 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 			u8 a = arr_16[(i * f->size >> 4) + ((ulen - 1) >> 1)] >> (i * f->size & 7);
 			u8 b = arr_16[(j * f->size >> 4) + ((ulen - 1) >> 1)] >> (j * f->size & 7);
 			u8 c = (a ^ b) & (0xff >> 8 - (f->size & 7));
-			
 			f->d[(k >> 3) + ulen - 1] = (f->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
 		}
-		
-		
 	}
-	
-	
-	
-}	
-  
-// typedef struct {
-	// u64 maas, frei;
-	// u64 v[];
-// } point_t; 
-
-// point_t *pnt_arr, **pnt_pntrs;
-// u64 pnt_localizer, pnt_alloc;
-
+}
 
 some number of (arr_count << 1 copies)
-  
-void grow(u64 size) {              
+
+void throw_shit_at_the_wall(u64 size) {              
 
     u64 ammo = ((count << 3) + size - 1) / size;
     u64 *arr_64 = (u64 *)arr;
     
-    #pragma omp parallel
-    {
-		
-		
-        #pragma omp for schedule(dynamic)
-		for (u64 i = 0; i < ammo; ++i) {
-			if (!pnt_pntrs[i][0]) continue;
-			c_bits[i >> 3] &= 1 << (i & 7);
-			w_p.path->p[w_p.path->lenght] = i;
-			
-			
-			for (u64 f = 0; f < size; ++f) {
-				
-				
-				
-				while (p) {
-					again:
-					u64 e = pnt_pntrs[nds[p]][3 + pth[p]];
-					if (pth[p] < pnt_pntrs[nds[p]][0]) {
-						if (!(bit[e >> 3] & 1 << (e & 7))) {
-							
-							pth_degree += pnt_pntrs[nds[p]][3 + pnt_pntrs[nds[p]][0] + pth[p]];
-							
-							bit[e >> 3] &= 1 << (e & 7);
-							
-							nds[p + 1] = pnt_pntrs[nds[p]][3 + pth[p++]++];
-							
-							
-				
-							}
-							
-							
-							
-							
-						} else {
-							++pth[p];
-							goto again;
-						}
-					} else {
-						bit[e >> 3] &= ~(1 << (e & 7))  ;
-						pth[p--] = 0;
-						++pth[p];
-							
-							
-
-
-
-
-
-void compose() {
 	
-}
-
 //LiFE
 //linear fiber extension
 //in loving memory of Terry A. Davis
