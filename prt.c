@@ -220,22 +220,7 @@ inline void adv_top_fbr(u64 i, u64 j) {
 
 		u64 l_fbr, n_s = 24 + (size * size + 7 >> 3);
 		
-		#pragma omp critical
-		{
-			if (fbr_bot + n_s > FIBR_ALLO) {
-				l_fbr = fbr_bot;
-				fbr_bot = 0;
-			} else {
-				l_fbr = fbr_bot;
-				fbr_bot += n_s;
-			}
-			if (fbr_bot == fbr_top) {
-				printf("queue full/n");
-				return void;
-			}
-		}
-		//this is fine
-		f = (fbr_t *)(fbr_arr + l_fbr);
+		fbr_t *f = calloc(size, 1);
 		
 		f->strt = fbr_pntr->strt;
 		f->size = fbr_pntr->size;
@@ -275,14 +260,26 @@ inline void adv_top_fbr(u64 i, u64 j) {
 			u8 c = (a ^ b) & (0xff >> 8 - (size & 7));
 			f->d[(k >> 3) + ulen - 1] = (fbr_pntr->d[(k >> 3) + ulen - 1] & (c >> (k & 7))) << ((k + 1) & 7);
 		}
+		
+		#pragma omp critical
+		{
+			if (fbr_bot + n_s > FIBR_ALLO) {
+				l_fbr = fbr_bot;
+				fbr_bot = 0;
+			} else {
+				l_fbr = fbr_bot;
+				fbr_bot += n_s;
+			}
+			if (fbr_bot == fbr_top) {
+				printf("queue full/n");
+				return void;
+			}
+			memcpy(f, fbr_arr + l_fbr, size);
+		}
 	}
 }
 
-typedef struct {
-	u8 *d, *b;
-} shit_t;
 u8 *shit_arr;
-shit_t **shit_pntrs;
 //data             bitmarker
 //<- arr_count -> | <- arr_count -> | ... 1 + ... + (1 << RAND_FCTR) ... | <- arr_count -> | <- arr_count -> |
 //                                        (1 << (RAND_FCTR + 1)) - 2   
@@ -291,15 +288,12 @@ void throw_shit_at_the_wall(void) {
     u64 ammo = ((count << 3) + size - 1) / size;
     u16 *arr_16 = (u16 *)arr;
 	
-	wrk_idx = malloc(thread_count * sizeof(u64));
-	for (u64 i = 0; i < thread_count; ++i) wrk_idx[i] = 0xffffffffffffffffULL;
-    
 	if (count * ((1 << (RAND_FCTR + 1) - 2) > 1024 * 1024 * 1024 * 8)) printf("over 8gb/n");
 	shit_arr = calloc(count * ((1 << (RAND_FCTR + 1) - 2), 1);
 	
 	fbr_arr = calloc(FIBR_ALLO, 1);
 	
-	for (u64 I = 0; I < RAND_FCTR; ++i) {
+	for (u64 I = 0; I < RAND_FCTR; ++I) {
 		for (u64 i = 0; i < count << 3; ++i) {
 			
 			link(count << 3 - i);
@@ -323,7 +317,6 @@ void throw_shit_at_the_wall(void) {
 //        in-place 'Wurm' - upon valid header confirmation follows the trail of 'least freedom' 
 //        Wurst - similar to Wurm, but looks for many such 'confirmed structures'
 int main(u16 argc, s8 *argv[]) {
-
 	
 	srand(time(NULL));
 	
