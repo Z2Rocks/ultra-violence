@@ -21,3 +21,5 @@ The functional loop is such:
     Compose Fxy . Fyz . ... = Fxyz...x
     use the freedom gatherd on the path to generate new data
     link that data in to something 'with hands and feet'
+    
+A few structural notes: "throw_shit_at_the_wall" is the rawest approach to the problem.  For actual usage (compressed files etc.) auxhillary methods should (probably) be used to identify structural components (s.a. header files), and follow the trail from there.
