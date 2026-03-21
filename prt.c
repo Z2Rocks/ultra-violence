@@ -200,9 +200,8 @@ inline u64 rndm_slct(u64 n, u64 size, u64 i) {
 
 u64 rando;
 
-inline void adv_top_fbr(u64 i, u64 j) {
+inline void adv_top_fbr(u64 i, u64 j, u64 size) {
 	u16 *arr_16 = (u16 *)arr;
-	u64 size = ((fbt_t *)(fbr_arr + fbr_top))->size;
 	fbr_t *fbr_pntr = malloc(size);
 	
 	#pragma omp critical
@@ -272,6 +271,8 @@ inline void adv_top_fbr(u64 i, u64 j) {
 			}
 			if (fbr_bot == fbr_top) {
 				printf("queue full/n");
+				free(fbr_pntr);
+				free(f);
 				return void;
 			}
 			memcpy(f, fbr_arr + l_fbr, size);
