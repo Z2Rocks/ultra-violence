@@ -25,6 +25,7 @@
 
 u8 *arr;
 u64 arr_count, arr_alloc;
+//main data array
 
 void load(s8 *file) {
     
@@ -65,6 +66,8 @@ typedef struct {
 	u64 maas, frei;
 	u64 v[];
 } point_t; 
+//connections
+//<- maas -> |
 
 point_t *pnt_arr, **pnt_pntrs;
 u64 pnt_localizer, pnt_alloc;
@@ -160,7 +163,7 @@ typedef struct {
 	u64 strt, size;
 	u8 d[];
 } fbr_t;
-   
+// bit-matrix
 // <- size * size + 7 >> 3 -> |
 
 u8 *fbr_arr;
@@ -246,17 +249,26 @@ inline void adv_fbr(u8 *fbr_ptr, u64 i, u64 j) {
 	}
 }
 
-some number of (arr_count << 1 copies)
-
+u8 *shit_arr;
+u64 shit_count;
+//data             bitmarker
+//<- arr_count -> | <- arr_count -> | ... shit_count ... | <- arr_count -> | <- arr_count -> |
+//                                       mb RAND_FCTR
 void throw_shit_at_the_wall(u64 size) {              
-
+	
     u64 ammo = ((count << 3) + size - 1) / size;
-    u64 *arr_64 = (u64 *)arr;
+    u16 *arr_16 = (u16 *)arr;
     
+	
+	
+	
+	
+	
 	
 //LiFE
 //linear fiber extension
 //in loving memory of Terry A. Davis
+
 // to-do, rewrite in Holy-C
 //        in-place 'Wurm'
 int main(u16 argc, s8 *argv[]) {

@@ -1,4 +1,10 @@
 {
+    "editor.trimAutoWhitespace": false,
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.autoSurround": "never",
+    "editor.formatOnSave": false,
+    "files.trimTrailingWhitespace": false,
     "keyboard.layout": "00000409",
     "workbench.colorTheme": "Default High Contrast",
     "editor.fontFamily": "Concorde, 'Courier New', monospace",
@@ -14,12 +20,13 @@
         "keywords": "#FF0000",
         "strings": "#FF0000",
         "functions": "#FF0000",
-        "variables": "#FF0000"
+        "variables": "#FF0000",
+        
     },
     "workbench.colorCustomizations": {
         "editor.wordHighlightBorder": "#00000000",
         "editor.wordHighlightStrongBorder": "#00000000",
         "editor.rangeHighlightBorder": "#00000000",
-        "editor.selectionBackground": "#ff00006b"
+        "editor.selectionBackground": "#ff00006b",
     }
 }

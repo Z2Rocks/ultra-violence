@@ -43,8 +43,22 @@ void load(s8 *file) {
 			if (!tmp) perror("load realloc failure #\n");
 			else arr = tmp;
         }
-        memcpy(arr + arr_count, buff, read);
-        arr_count += read;
+        u8 p, q = 0;
+		for (u64 i = 0; i < read; ++i) {
+			p = buff[i];
+			for (u8 j = 0; j < 4; ++j) {
+				if (p & 0x01) q &= 0x01 << (j << 1);
+				p =>> 1;
+			}
+			arr[++arr_count] = q;
+			q = 0;
+			for (u8 j = 0; j < 4; ++j) {
+				if (p & 0x01) q &= 0x01 << (j << 1);
+				p =>> 1;
+			}
+			arr[++arr_count] = q;
+			q = 0;
+		}
     }
 
     if (arr_alloc < arr_count << 1) {
@@ -514,27 +528,28 @@ typedef struct {
 	u64 strt, size, free;
 	u8 d[];
 } fbr_t;
-//bit data                    free locations               equations in order     
-//<- size * size + 7 >> 3 -> | <- size * size + 7 >> 3 -> | <- FIBR_LIMT * size * (size - 1) -> | <- growth < ~5*3^n <?=> 1024 * 1024 => ~10 stacked mlt add steps per
+//matrix                      equations in order     
+//<- size * size + 7 >> 2 -> | <- FIBR_LIMT * size * (size - 1) -> | <- growth < ~5*3^n <?=> 1024 * 1024 => ~10 stacked mlt add steps per
 
 inline fbr_t *init_fbr(u64 i, u64 j, u64 size) {
 	u16 *arr_16 = (u16 *)arr;
-	fbr_t *f = calloc(24 + (size * size + 7 >> 3) + (size * (size - 1) + 7 >> 3) + FIBR_LIMT * size * (size - 1), 1);
+	fbr_t *f = calloc(24 + (size * size + 7 >> 2) + FIBR_LIMT * size * (size - 1), 1);
 	f->strt = i * size;
 	f->size = size;
+	
 	for (u64 k = 0; k < size - 1; ++k) {
 		u8 a = arr_16[i * size + k >> 4] >> (i * size + k & 7);
 		u8 b = arr_16[j * size + k >> 4] >> (j * size + k & 7);
-		f->d[k * size >> 3] &= 1 << (k * size & 7);
-		f->d[k * size >> 3] &= ((a ^ b) & 1 << (k & 7)) >> (8 - (k & 7)) << (k * size + 1 & 7);
+		if (!(a & 1 << (k & 7)))
+			f->d[((k + 1) * size >> 2)] &= 0x03 << ((k + 1 << 1) & 7);
+	    } else if ((a ^ b) & 1 << (k & 7)) {
+			f->d[((k + 1) * size >> 2)] &= 0x01 << ((k + 1 << 1) & 7);
+		}
+		f->d[(k * size >> 2)] &= 0x01 << ((k << 1) * size & 7);		
 	}
-	f->d[size * size >> 3] &= 1 << (size * size & 7);
-	u64 t = size * size + 7 >> 3;
-	for (u64 k = 0; k < size - 1; ++k) {
-		u8 a = arr_16[i * size + k >> 4] >> (i * size + k & 7);
-		f->d[t + (k * size >> 3)] &= (a & (1 << k & 7)) >> (8 - (k & 7)) << (k * size + 1 & 7);
-	}
-	t += size * size + 7 >> 3;
+	
+	u64 t = size * size + 7 >> 2;
+	
 	f->free = pnt_pntrs[i].frei;
 	eqn_t *e;
 	for (u64 k = 0; k < f->free; ++k) {
@@ -575,26 +590,21 @@ inline fbr_t *init_fbr(u64 i, u64 j, u64 size) {
 
 inline void adv_fbr(fbr_t *f, fbr_t *n, u64 i, u64 j) {
 	u16 *arr_16 = (u16 *)arr;
-	memcpy(f->d, n->d, f->size * f->size + 7 >> 3);
-	for (u64 k = 0; k < f->size * f->size; ++k) {
-		u8 a = arr_16[i * f->size + (k % f->size) >> 4] >> (i * f->size + (k % f->size) & 7);
-		u8 b = arr_16[j * f->size + (k % f->size) >> 4] >> (j * f->size + (k % f->size) & 7);
-		u8 c = (a ^ b) & (0xff >> (0 : 8 - (f->size & 7) ? (k % f->size) >> 3 < f->size - 1 >> 3));
-		n->d[(k % f->size) >> 3] ^= (f->d[(k % f->size) >> 3] & (c >> ((k % f->size) & 7))) << (((k + 1) % f->size) & 7);
-	}
 	
-	u64 temp = 0, n = f->free + 1, m = 0;
+	u8 p, q;
+	u64 n = f->free, m = 0;
 	for (u64 k = 0; k < f->size * f->size; ++k) {
-		bool x_v, x_f, y_v, y_f;
+		
+		p = f->d[k >> 2];hmm
 		
 		
-
-		k , k + 1 and k + (f->size * f->size + 7 >> 3), k + 1 +...
 		
-		k * c(m)
-		k+1 always * 1
 		
-		k ^ k+1
+		
+		
+		
+				
+		
 		
 		u8 a = arr_16[i * f->size + m >> 4] >> (i * f->size + m & 7);
 		u8 b = arr_16[j * f->size + m >> 4] >> (j * f->size + m & 7);
