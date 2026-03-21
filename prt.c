@@ -301,7 +301,7 @@ void throw_shit_at_the_wall(void) {
 			
 			link(count << 3 - i);
 			
-			
+			.
 			init fbrs
 			
 			adv fibers
